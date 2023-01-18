@@ -9,26 +9,30 @@ export class News extends Component {
       articles: [],
       loading: false,
       page: 1,
+      totalResults: 0
     };
   }
   async componentDidMount() {
     let url =
-      "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=1&pageSize=20";
+      "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=1&pageSize=21";
     let data = await fetch(url);
     let dataParse = await data.json();
-    console.log(dataParse)
+    console.log(dataParse);
     this.setState({
       articles: dataParse.articles,
-      totalResult: dataParse.totalResults,
+      totalResults: dataParse.totalResults,
     });
   }
 
   handleNextClick = async () => {
-    if (this.state.page + 1 > Math.ceil(this.state.totalResults/20)) {
+    
+    if (this.state.page + 1 > Math.ceil((this.state.totalResults / 21))) {
+
     } else {
+
       let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
         this.state.page + 1
-      }&pageSize=20`;
+      }&pageSize=21`;
       let data = await fetch(url);
       let dataParse = await data.json();
       this.setState({
@@ -40,12 +44,11 @@ export class News extends Component {
   handlePrevClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
       this.state.page - 1
-    }&pageSize=20`;
+    }&pageSize=21`;
     let data = await fetch(url);
     let dataParse = await data.json();
     this.setState({ page: this.state.page - 1, articles: dataParse.articles });
   };
-
   render() {
     return (
       <div className="container my-3">
@@ -79,6 +82,7 @@ export class News extends Component {
             &larr; Previous
           </Button>
           <Button
+          disabled={this.state.page+1 > Math.ceil(this.state.totalResults/21)}
             variant="primary"
             className="my-3 mx-3"
             onClick={this.handleNextClick}
