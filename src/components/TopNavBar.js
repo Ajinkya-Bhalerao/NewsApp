@@ -14,7 +14,7 @@ export class TopNavBar extends Component {
         <Navbar bg="light" expand="lg">
           <Container fluid>
             <Navbar.Brand>
-              <strong>N</strong>ews<strong>A</strong>pp
+              NewsApp
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbarScroll" />
             <Navbar.Collapse id="navbarScroll">

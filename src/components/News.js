@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 import Spinner from "./Spinner";
 import NewsItem from "./NewsItem";
 import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export class News extends Component {
   static defaultProps = {
@@ -27,7 +28,7 @@ export class News extends Component {
   }
   async updateNews() {
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&catagory=${this.props.catagory}&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    this.setState({ loading: false });
+    this.setState({ loading: true });
     let data = await fetch(url);
     let dataParse = await data.json();
     this.setState({
@@ -40,44 +41,70 @@ export class News extends Component {
     this.updateNews();
   }
 
-  handleNextClick = async () => {
+  fetchMoreData = async () => {
     this.setState({ page: this.state.page + 1 });
-    this.updateNews();
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&catagory=${this.props.catagory}&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+    let data = await fetch(url);
+    let dataParse = await data.json();
+    this.setState({
+      articles: this.state.articles.concat(dataParse.articles),
+      totalResults: dataParse.totalResults,
+    });
   };
-  handlePrevClick = async () => {
-    this.setState({ page: this.state.page - 1 });
-    this.updateNews();
-  };
+  // handleNextClick = async () => {
+  //   this.setState({ page: this.state.page + 1 });
+  //   this.updateNews();
+  // };
+  // handlePrevClick = async () => {
+  //   this.setState({ page: this.state.page - 1 });
+  //   this.updateNews();
+  // };
+
   render() {
     return (
-      <div className="container my-3">
+      <>
         <h1 className="text-center" style={{ margin: "35px 10px" }}>
-          Top Headlines
+          NewsApp - Top Headlines on{" "}
+          {this.props.catagory.charAt(0).toUpperCase() +
+            this.props.catagory.slice(1)}{" "}
+          Catagory
         </h1>
         {this.state.loading && <Spinner />}
-        <div className="row">
-          {!this.state.loading &&
-            this.state.articles.map((element) => {
-              return (
-                <div className="col-md-4" key={element.url}>
-                  <NewsItem
-                    title={element.title ? element.title : ""}
-                    description={element.description ? element.description : ""}
-                    imageUrl={
-                      element.urlToImage
-                        ? element.urlToImage
-                        : "https://images.barrons.com/im-703207/social"
-                    }
-                    newsUrl={element.url}
-                    author={element.author}
-                    date={element.publishedAt}
-                    source={element.source}
-                  />
-                </div>
-              );
-            })}
-        </div>
-        <div className="container d-flex justify-content-between">
+
+        <InfiniteScroll
+          dataLength={this.state.articles.length}
+          next={this.fetchMoreData}
+          hasMore={this.state.articles.length !== this.state.totalResults}
+          loader={<Spinner />}
+        >
+          <div className="container">
+            <div className="row">
+              {this.state.articles.map((element) => {
+                return (
+                  <div className="col-md-4" key={element.url}>
+                    <NewsItem
+                      title={element.title ? element.title : ""}
+                      description={
+                        element.description ? element.description : ""
+                      }
+                      imageUrl={
+                        element.urlToImage
+                          ? element.urlToImage
+                          : "https://images.barrons.com/im-703207/social"
+                      }
+                      newsUrl={element.url}
+                      author={element.author}
+                      date={element.publishedAt}
+                      source={element.source}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </InfiniteScroll>
+
+        {/* <div className="container d-flex justify-content-between">
           <Button
             disabled={this.state.page <= 1}
             variant="primary"
@@ -97,8 +124,8 @@ export class News extends Component {
           >
             Next &rarr;
           </Button>
-        </div>
-      </div>
+        </div> */}
+      </>
     );
   }
 }
