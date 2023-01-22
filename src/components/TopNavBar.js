@@ -24,6 +24,13 @@ export class TopNavBar extends Component {
               >
                 <Nav.Link href="/">Home</Nav.Link>
                 <Nav.Link href="/about">About</Nav.Link>
+                <Nav.Link href="/business">Business</Nav.Link>
+                <Nav.Link href="/entertainment">Entertainment</Nav.Link>
+                <Nav.Link href="/general">General</Nav.Link>
+                <Nav.Link href="/health">Health</Nav.Link>
+                <Nav.Link href="/science">Science</Nav.Link>
+                <Nav.Link href="/sports">Sports</Nav.Link>
+                <Nav.Link href="/technology">Technology</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Container>

@@ -2,8 +2,20 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Spinner from "./Spinner";
 import NewsItem from "./NewsItem";
+import PropTypes from "prop-types";
 
 export class News extends Component {
+  static defaultProps = {
+    country: "in",
+    pageSize: 9,
+    catagory: "general",
+  };
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    catagory: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,15 +26,15 @@ export class News extends Component {
     };
   }
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=1&pageSize=${this.props.pageSize}`;
-    this.setState({loading: false})
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&catagory=${this.props.catagory}&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=1&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: false });
     let data = await fetch(url);
     let dataParse = await data.json();
     console.log(dataParse);
     this.setState({
       articles: dataParse.articles,
       totalResults: dataParse.totalResults,
-      loading: false
+      loading: false,
     });
   }
 
@@ -33,7 +45,11 @@ export class News extends Component {
         Math.ceil(this.state.totalResults / this.props.pageSize)
       )
     ) {
-      let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
+      let url = `https://newsapi.org/v2/top-headlines?country=${
+        this.props.country
+      }&catagory=${
+        this.props.catagory
+      }&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
         this.state.page + 1
       }&pageSize=${this.props.pageSize}`;
       this.setState({ loading: true });
@@ -47,7 +63,11 @@ export class News extends Component {
     }
   };
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
+    let url = `https://newsapi.org/v2/top-headlines?country=${
+      this.props.country
+    }&catagory=${
+      this.props.catagory
+    }&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
       this.state.page - 1
     }&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
@@ -62,25 +82,26 @@ export class News extends Component {
   render() {
     return (
       <div className="container my-3">
-        <h2 className="text-center">Top Headlines</h2>
+        <h1 className="text-center" style={{margin: "35px 10px"}}>Top Headlines</h1>
         {this.state.loading && <Spinner />}
         <div className="row">
-          {!this.state.loading && this.state.articles.map((element) => {
-            return (
-              <div className="col-md-4" key={element.url}>
-                <NewsItem
-                  title={element.title ? element.title : ""}
-                  description={element.description ? element.description : ""}
-                  imageUrl={
-                    element.urlToImage
-                      ? element.urlToImage
-                      : "https://images.barrons.com/im-703207/social"
-                  }
-                  newsUrl={element.url}
-                />
-              </div>
-            );
-          })}
+          {!this.state.loading &&
+            this.state.articles.map((element) => {
+              return (
+                <div className="col-md-4" key={element.url}>
+                  <NewsItem
+                    title={element.title ? element.title : ""}
+                    description={element.description ? element.description : ""}
+                    imageUrl={
+                      element.urlToImage
+                        ? element.urlToImage
+                        : "https://images.barrons.com/im-703207/social"
+                    }
+                    newsUrl={element.url}
+                  />
+                </div>
+              );
+            })}
         </div>
         <div className="container d-flex justify-content-between">
           <Button

@@ -8,7 +8,7 @@ export class NewsItem extends Component {
     return (
       <div>
         <div className="my-3">
-          <Card style={{ width: "18rem" }} className="mx-3 my-2">
+          <Card className="mx-3 my-2">
             <Card.Img variant="top" src={imageUrl} />
             <Card.Body>
               <Card.Title>{title}</Card.Title>
