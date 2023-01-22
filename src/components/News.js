@@ -97,6 +97,9 @@ export class News extends Component {
                         : "https://images.barrons.com/im-703207/social"
                     }
                     newsUrl={element.url}
+                    author={element.author}
+                    date={element.publishedAt}
+                    source={element.source}
                   />
                 </div>
               );
