@@ -25,8 +25,8 @@ export class News extends Component {
       totalResults: 0,
     };
   }
-  async componentDidMount() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&catagory=${this.props.catagory}&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=1&pageSize=${this.props.pageSize}`;
+  async updateNews() {
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&catagory=${this.props.catagory}&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: false });
     let data = await fetch(url);
     let dataParse = await data.json();
@@ -36,52 +36,24 @@ export class News extends Component {
       loading: false,
     });
   }
+  async componentDidMount() {
+    this.updateNews();
+  }
 
   handleNextClick = async () => {
-    if (
-      !(
-        this.state.page + 1 >
-        Math.ceil(this.state.totalResults / this.props.pageSize)
-      )
-    ) {
-      let url = `https://newsapi.org/v2/top-headlines?country=${
-        this.props.country
-      }&catagory=${
-        this.props.catagory
-      }&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
-        this.state.page + 1
-      }&pageSize=${this.props.pageSize}`;
-      this.setState({ loading: true });
-      let data = await fetch(url);
-      let dataParse = await data.json();
-      this.setState({
-        page: this.state.page + 1,
-        articles: dataParse.articles,
-        loading: false,
-      });
-    }
+    this.setState({ page: this.state.page + 1 });
+    this.updateNews();
   };
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/top-headlines?country=${
-      this.props.country
-    }&catagory=${
-      this.props.catagory
-    }&apiKey=28e2df57e43544eaa8e94f9b9d179520&page=${
-      this.state.page - 1
-    }&pageSize=${this.props.pageSize}`;
-    this.setState({ loading: true });
-    let data = await fetch(url);
-    let dataParse = await data.json();
-    this.setState({
-      page: this.state.page - 1,
-      articles: dataParse.articles,
-      loading: false,
-    });
+    this.setState({ page: this.state.page - 1 });
+    this.updateNews();
   };
   render() {
     return (
       <div className="container my-3">
-        <h1 className="text-center" style={{margin: "35px 10px"}}>Top Headlines</h1>
+        <h1 className="text-center" style={{ margin: "35px 10px" }}>
+          Top Headlines
+        </h1>
         {this.state.loading && <Spinner />}
         <div className="row">
           {!this.state.loading &&
