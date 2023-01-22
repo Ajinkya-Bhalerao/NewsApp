@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
 
 export class TopNavBar extends Component {
   //   static propTypes = {}
@@ -22,15 +23,13 @@ export class TopNavBar extends Component {
                 style={{ maxHeight: "100px" }}
                 navbarScroll
               >
-                <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/about">About</Nav.Link>
-                <Nav.Link href="/business">Business</Nav.Link>
-                <Nav.Link href="/entertainment">Entertainment</Nav.Link>
-                <Nav.Link href="/general">General</Nav.Link>
-                <Nav.Link href="/health">Health</Nav.Link>
-                <Nav.Link href="/science">Science</Nav.Link>
-                <Nav.Link href="/sports">Sports</Nav.Link>
-                <Nav.Link href="/technology">Technology</Nav.Link>
+                <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/business" id="RouterNavLink">Business</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/entertainment" id="RouterNavLink">Entertainment</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/Health" id="RouterNavLink">Health</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/science" id="RouterNavLink">Science</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/sports" id="RouterNavLink">Sports</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/technology" id="RouterNavLink">Technology</Link></li>
               </Nav>
             </Navbar.Collapse>
           </Container>
